@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+endpoints:
+  customerCore: "http://localhost:9001"
+  cards: "http://localhost:9002"
+  points: "http://localhost:9003"
+  holders: "http://localhost:9004"
+
+crypto:
+  hmacSecret: "troque-por-um-segredo-forte-32bytes-+"
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      customerCore: { slidingWindowSize: 20, failureRateThreshold: 50, waitDurationInOpenState: 10s }
+      cardProposals: { slidingWindowSize: 20 }
+      points: { slidingWindowSize: 20 }
+      holders: { slidingWindowSize: 20 }
+  retry:
+    instances:
+      defaultRetry: { maxAttempts: 3, waitDuration: 200ms }
